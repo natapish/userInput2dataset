@@ -1,14 +1,31 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { TextField, Button, Grid, Typography } from '@mui/material';
 import { useTable } from 'react-table';
 
 export default function Home() {
-    const [columns, setColumns] = useState(['']); //column
-    const [dataTypes, setDataTypes] = useState(['']); //data type
-    const [dataValues, setDataValues] = useState([[]]); //(array of rows)
+    const [columns, setColumns] = useState(['']); // Columns
+    const [dataValues, setDataValues] = useState([[]]); // Array of rows
     const [responseMessage, setResponseMessage] = useState('');
-    const [tableData, setTableData] = useState([]); // user input transformed to data for dataset conversion 
+    const [tableData, setTableData] = useState([]); // User input transformed to data for dataset conversion 
+
+    // Function to infer data types for each data value
+    const inferDataTypes = (dataValues) => {
+        if (dataValues.length === 0 || dataValues[0].length === 0) return [];
+
+        // Create a 2D array for storing the inferred data types
+        const inferredTypes = dataValues.map(row => row.map(value => {
+            if (value === null || value === undefined || value === '') return 'string';
+            if (!isNaN(value)) return value.includes('.') ? 'float' : 'integer';
+            if (!isNaN(Date.parse(value))) return 'date';
+            if (value === 'true' || value === 'false') return 'boolean';
+            return 'string';
+        }));
+
+        return inferredTypes;
+    };
+
+    // Handle changes in the column values and data values
 
     const handleColumnChange = (index, value) => {
         const newColumns = [...columns];
@@ -16,26 +33,36 @@ export default function Home() {
         setColumns(newColumns);
     };
 
-    const handleDataTypeChange = (index, value) => {
-        const newDataTypes = [...dataTypes];
-        newDataTypes[index] = value;
-        setDataTypes(newDataTypes);
-    };
-
     const handleDataValueChange = (rowIndex, colIndex, value) => {
         const newDataValues = [...dataValues];
         if (!newDataValues[rowIndex]) {
             newDataValues[rowIndex] = [];
         }
+        // Infer data types based on data values
         newDataValues[rowIndex][colIndex] = value;
+        setDataValues(newDataValues);
+        const inferredTypes = inferDataTypes(newDataValues);
+        console.log('Inferred Data Types:', inferredTypes);
+    };
+
+    // Add a new row for dataValues
+    const addRow = () => {
+        const newDataValues = [...dataValues];
+        const newRow = new Array(columns.length).fill('');
+        newDataValues.push(newRow);
         setDataValues(newDataValues);
     };
 
+    // Automatically infer data types internally based on data values
+    useEffect(() => {
+        const inferredTypes = inferDataTypes(dataValues);
+        console.log('Inferred Data Types:', inferredTypes);
+    }, [dataValues]);
+
+    // Sent data structure
     const sendTableData = async () => {
-        // Prepare data to be sent
         const tableData = {
             columns,
-            dataTypes,
             rows: dataValues,
         };
 
@@ -51,7 +78,7 @@ export default function Home() {
             const result = await response.json();
             if (response.ok) {
                 setResponseMessage(result.message);
-                // Result.data contains the processed rows and set transformed data for visualization
+                // result.data contains the processed rows and set transformed data for visualization
                 setTableData(result.data || []);
             } else {
                 setResponseMessage(result.error || 'An error occurred');
@@ -62,7 +89,7 @@ export default function Home() {
         }
     };
 
-    // React-table- transform input to data table (visualize)
+    // React-table: transform input to data table (visualize)
     const columnsForTable = useMemo(() => {
         return columns
             .filter(col => col)
@@ -85,30 +112,30 @@ export default function Home() {
         columns: columnsForTable,
         data: transformedData,
     });
-      // Export table data to CSV
+
+    // Export table data to CSV
     const handleExportCSV = () => {
-      const csvRows = [];
+        const csvRows = [];
 
-      csvRows.push(columns.join(','));
+        csvRows.push(columns.join(','));
 
-      dataValues.forEach(row => {
-          const csvRow = row.join(',');
-          csvRows.push(csvRow);
-      });
+        dataValues.forEach(row => {
+            const csvRow = row.join(',');
+            csvRows.push(csvRow);
+        });
 
-      // Create a CSV Blob
-      const csvString = csvRows.join('\n');
-      const blob = new Blob([csvString], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
 
-      // Create a link and trigger the download
-      const a = document.createElement('a');
-      a.setAttribute('hidden', '');
-      a.setAttribute('href', url);
-      a.setAttribute('download', 'table_data.csv');
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+        // Create a link and trigger the download
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'table_data.csv');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     };
 
     return (
@@ -135,23 +162,6 @@ export default function Home() {
             </Grid>
 
             <Grid item xs={12}>
-                <Typography variant="h6">Data Types</Typography>
-                {dataTypes.map((type, index) => (
-                    <TextField
-                        key={index}
-                        label={`Type for Column ${index + 1}`}
-                        value={type}
-                        onChange={(e) => handleDataTypeChange(index, e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-                ))}
-                <Button variant="contained" onClick={() => setDataTypes([...dataTypes, ''])}>
-                    Add Data Type
-                </Button>
-            </Grid>
-
-            <Grid item xs={12}>
                 <Typography variant="h6">Data Values</Typography>
                 {dataValues.map((row, rowIndex) => (
                     <Grid container spacing={2} key={rowIndex}>
@@ -168,14 +178,14 @@ export default function Home() {
                         ))}
                     </Grid>
                 ))}
-                <Button variant="contained" onClick={() => setDataValues([...dataValues, new Array(columns.length).fill('')])}>
+                <Button variant="contained" onClick={addRow}>
                     Add Row
                 </Button>
             </Grid>
 
             <Grid item xs={12}>
                 <Button variant="contained" onClick={sendTableData}>
-                    Send Information to Research Instituion
+                    Send Information to Research Institution
                 </Button>
                 <Button variant="contained" onClick={handleExportCSV} style={{ marginLeft: '16px' }}>
                     Export CSV
