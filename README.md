@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FlexiFormat 🚀
 
-## Getting Started
+FlexiFormat is a Next.js-based web application that allows users to easily transform and format data. It provides an intuitive interface for inputting, visualizing, and exporting data in various formats.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 📊 Dynamic column and row creation
+- 🧠 Data type inference
+- 📁 CSV export functionality
+- 📈 Real-time data visualization
+- 📱 Responsive design with animated UI elements
+- 🤖 RAG-powered intelligent data entry assistance
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js (version 14 or later)
+- npm or yarn
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```
+   git clone https://github.com/your-username/flexiformat.git
+   cd flexiformat
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Install dependencies:
 
-## Deploy on Vercel
+   ```
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   or
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```
+   yarn install
+   ```
+
+3. Run the development server:
+
+   ```
+   npm run dev
+   ```
+
+   or
+
+   ```
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## 🏗️ Project Structure
+
+- `app/`: Contains the main application pages and API routes
+- `components/`: Reusable React components
+- `lib/`: Utility functions
+- `public/`: Static assets
+
+## 🔑 Key Components
+
+### Convert Page
+
+The main data conversion interface is located in `app/convert/page.js`. This component handles:
+
+- Column and row management
+- Data type inference
+- CSV export
+- Data visualization
+
+### Homepage
+
+The landing page component is in `components/homepage.jsx`.
+
+## 🤖 RAG-Powered Intelligent Data Entry
+
+FlexiFormat incorporates a Retrieval-Augmented Generation (RAG) system to enhance the user experience when entering data. This feature helps users fill in values more efficiently and consistently. For example:
+
+- If a user adds a column titled "Age", the system will infer and suggest the unit "yrs old" for entries.
+- When a column for "Height" is created, the system will intelligently suggest formats like "feet and inches".
+
+This RAG system is trained on a diverse dataset of common data entry patterns and can adapt to various domains, making data input more intuitive and reducing errors.
+
+### How it works
+
+1. 🔍 As users create new columns, the RAG system analyzes the column names and context.
+2. 💡 Based on this analysis, it suggests appropriate formats or units for the data.
+3. ⚡ As users enter values, the system provides real-time suggestions and auto-completions.
+4. 📚 The system learns from user interactions, continuously improving its suggestions over time.
+
+This feature not only speeds up data entry but also helps maintain consistency across large datasets.
+
+## 🎨 Styling
+
+The project uses Tailwind CSS for styling. Global styles are defined in `app/globals.css`.
+
+## 🛠️ API Routes
+
+Data processing is handled by the API route in `pages/api/data.js`.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
