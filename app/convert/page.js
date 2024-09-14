@@ -1,13 +1,14 @@
 "use client";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { useTable } from "react-table";
 
-export default function Home() {
-  const [columns, setColumns] = useState([""]); // Columns
-  const [dataValues, setDataValues] = useState([[]]); // Array of rows
+export default function Convert() {
+  const [columns, setColumns] = useState([""]);
+  const [dataValues, setDataValues] = useState([[]]);
   const [responseMessage, setResponseMessage] = useState("");
-  const [tableData, setTableData] = useState([]); // User input transformed to data for dataset conversion
+  const [tableData, setTableData] = useState([]);
 
   // Function to infer data types for each data value
   const inferDataTypes = (dataValues) => {
@@ -143,115 +144,165 @@ export default function Home() {
   };
 
   return (
-    <Grid container spacing={3} padding={2}>
-      <Grid item xs={12}>
-        <Typography variant="h4">Table Data Input</Typography>
-      </Grid>
-
-      <Grid item xs={12}>
-        <Typography variant="h6">Columns</Typography>
-        {columns.map((col, index) => (
-          <TextField
-            key={index}
-            label={`Column ${index + 1}`}
-            value={col}
-            onChange={(e) => handleColumnChange(index, e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-        ))}
-        <Button
-          variant="contained"
-          onClick={() => setColumns([...columns, ""])}
+    <div className="min-h-screen bg-gray-900 text-white overflow-hidden font-sans">
+      <motion.div
+        className="absolute w-[40vw] h-[40vw] bg-purple-500 rounded-full filter blur-3xl opacity-10 top-0 left-0"
+        animate={{
+          x: [0, 100, 0],
+          y: [0, 100, 0],
+        }}
+        transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute w-[40vw] h-[40vw] bg-blue-500 rounded-full filter blur-3xl opacity-10 bottom-0 right-0"
+        animate={{
+          x: [0, -100, 0],
+          y: [0, -100, 0],
+        }}
+        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+      />
+      <div className="relative z-10 container mx-auto px-4 py-12">
+        <motion.h1
+          className="text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          Add Column
-        </Button>
-      </Grid>
+          Data Conversion
+        </motion.h1>
 
-      <Grid item xs={12}>
-        <Typography variant="h6">Data Values</Typography>
-        {dataValues.map((row, rowIndex) => (
-          <Grid container spacing={2} key={rowIndex}>
-            {columns.map((col, colIndex) => (
-              <Grid item xs={12} sm={6} md={4} key={colIndex}>
-                <TextField
-                  label={`Value for ${col}`}
+        <motion.div
+          className="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h2 className="text-2xl font-semibold mb-4">Columns</h2>
+          {columns.map((col, index) => (
+            <input
+              key={index}
+              className="bg-gray-700 text-white rounded px-3 py-2 mb-2 w-full"
+              placeholder={`Column ${index + 1}`}
+              value={col}
+              onChange={(e) => handleColumnChange(index, e.target.value)}
+            />
+          ))}
+          <Button
+            onClick={() => setColumns([...columns, ""])}
+            className="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+          >
+            Add Column
+          </Button>
+        </motion.div>
+
+        <motion.div
+          className="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <h2 className="text-2xl font-semibold mb-4">Data Values</h2>
+          {dataValues.map((row, rowIndex) => (
+            <div key={rowIndex} className="mb-4">
+              {columns.map((col, colIndex) => (
+                <input
+                  key={colIndex}
+                  className="bg-gray-700 text-white rounded px-3 py-2 mb-2 w-full"
+                  placeholder={`Value for ${col}`}
                   value={row[colIndex] || ""}
                   onChange={(e) =>
                     handleDataValueChange(rowIndex, colIndex, e.target.value)
                   }
-                  fullWidth
-                  margin="normal"
                 />
-              </Grid>
-            ))}
-          </Grid>
-        ))}
-        <Button variant="contained" onClick={addRow}>
-          Add Row
-        </Button>
-      </Grid>
+              ))}
+            </div>
+          ))}
+          <Button
+            onClick={addRow}
+            className="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+          >
+            Add Row
+          </Button>
+        </motion.div>
 
-      <Grid item xs={12}>
-        <Button variant="contained" onClick={sendTableData}>
-          Send Information to Research Institution
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleExportCSV}
-          style={{ marginLeft: "16px" }}
+        <div className="flex justify-center space-x-4">
+          <Button
+            onClick={sendTableData}
+            className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+          >
+            Send Information
+          </Button>
+          <Button
+            onClick={handleExportCSV}
+            className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+          >
+            Export CSV
+          </Button>
+        </div>
+
+        {responseMessage && (
+          <motion.div
+            className="mt-8 p-4 bg-gray-800 rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl font-semibold mb-2">Response</h2>
+            <p>{responseMessage}</p>
+          </motion.div>
+        )}
+
+        <motion.div
+          className="mt-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Export CSV
-        </Button>
-      </Grid>
-
-      {responseMessage && (
-        <Grid item xs={12}>
-          <Typography variant="h6">Response</Typography>
-          <Typography>{responseMessage}</Typography>
-        </Grid>
-      )}
-
-      {/* Display Table Data */}
-      <Grid item xs={12}>
-        <Typography variant="h6">Table Data Visualization</Typography>
-        <table
-          {...getTableProps()}
-          style={{ border: "1px solid black", width: "100%" }}
-        >
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    style={{ border: "1px solid black", padding: "8px" }}
+          <h2 className="text-2xl font-semibold mb-4">
+            Table Data Visualization
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full bg-gray-800 rounded-lg overflow-hidden">
+              <thead>
+                {headerGroups.map((headerGroup, i) => (
+                  <tr
+                    {...headerGroup.getHeaderGroupProps()}
+                    key={`header-group-${i}`}
                   >
-                    {column.render("Header")}
-                  </th>
+                    {headerGroup.headers.map((column, j) => (
+                      <th
+                        {...column.getHeaderProps()}
+                        className="px-4 py-2 text-left text-gray-300 border-b border-gray-700"
+                        key={`header-${i}-${j}`}
+                      >
+                        {column.render("Header")}
+                      </th>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td
-                      {...cell.getCellProps()}
-                      style={{ border: "1px solid black", padding: "8px" }}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </Grid>
-    </Grid>
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row, i) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()} key={`row-${i}`}>
+                      {row.cells.map((cell, j) => (
+                        <td
+                          {...cell.getCellProps()}
+                          className="px-4 py-2 border-b border-gray-700"
+                          key={`cell-${i}-${j}`}
+                        >
+                          {cell.render("Cell")}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 }
