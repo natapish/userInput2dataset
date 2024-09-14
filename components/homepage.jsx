@@ -68,13 +68,21 @@ export function Homepage() {
           FlexiFormat
         </motion.h1>
         <motion.p
-          className="text-2xl text-gray-300 mb-10 max-w-2xl text-center relative z-10 leading-relaxed"
+          className="text-2xl text-gray-300 max-w-4xl text-center relative z-10 leading-relaxed"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           Transform your data effortlessly with our intuitive and powerful
-          formatting tool. Simplify complex data structures in seconds.
+          formatting tool.
+        </motion.p>
+        <motion.p
+          className="text-2xl text-gray-300 mb-10 max-w-2xl text-center relative z-10 leading-relaxed"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Simplify complex data structures in seconds.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
