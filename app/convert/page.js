@@ -143,6 +143,23 @@ export default function Convert() {
     document.body.removeChild(a);
   };
 
+  // Add these functions after the existing state declarations
+
+  const deleteColumn = (index) => {
+    const newColumns = columns.filter((_, i) => i !== index);
+    setColumns(newColumns);
+
+    const newDataValues = dataValues.map((row) =>
+      row.filter((_, i) => i !== index)
+    );
+    setDataValues(newDataValues);
+  };
+
+  const deleteRow = (index) => {
+    const newDataValues = dataValues.filter((_, i) => i !== index);
+    setDataValues(newDataValues);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white overflow-hidden font-sans">
       <motion.div
@@ -179,13 +196,21 @@ export default function Convert() {
         >
           <h2 className="text-2xl font-semibold mb-4">Columns</h2>
           {columns.map((col, index) => (
-            <input
-              key={index}
-              className="bg-gray-700 text-white rounded px-3 py-2 mb-2 w-full"
-              placeholder={`Column ${index + 1}`}
-              value={col}
-              onChange={(e) => handleColumnChange(index, e.target.value)}
-            />
+            <div key={index} className="flex items-center mb-2">
+              <input
+                className="bg-gray-700 text-white rounded px-3 py-2 w-full mr-2"
+                placeholder={`Column ${index + 1}`}
+                value={col}
+                onChange={(e) => handleColumnChange(index, e.target.value)}
+              />
+              <Button
+                onClick={() => deleteColumn(index)}
+                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center align-middle focus:outline-none"
+                size="sm"
+              >
+                X
+              </Button>
+            </div>
           ))}
           <Button
             onClick={() => setColumns([...columns, ""])}
@@ -215,6 +240,13 @@ export default function Convert() {
                   }
                 />
               ))}
+              <Button
+                onClick={() => deleteRow(rowIndex)}
+                className="bg-red-500 hover:bg-red-600 mt-2"
+                size="sm"
+              >
+                Delete Row
+              </Button>
             </div>
           ))}
           <Button
