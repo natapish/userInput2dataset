@@ -69,7 +69,7 @@ function Loginpage() {
             <p className="mt-2 text-center text-sm text-gray-300">
               Or{" "}
               <Link
-                href="#"
+                href="/pricing"
                 className="font-medium text-indigo-400 hover:text-indigo-300"
               >
                 start your 14-day free trial
