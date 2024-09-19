@@ -35,12 +35,11 @@ export function Homepage() {
         <div className="text-xl font-semibold text-gray-300 hover:text-white transition-colors duration-300">
           FlexiFormat
         </div>
-        <Link
-          href="/login"
-          className="text-sm text-gray-400 hover:text-white transition-colors duration-300"
-        >
-          Already have an account? Log in
-        </Link>
+        <Button className="bg-transparent hover:bg-[#8D60F7]">
+          <Link href="/login" className="text-sm text-white">
+            Login
+          </Link>
+        </Button>
       </nav>
       <main className="flex flex-col items-center justify-center min-h-screen relative">
         <motion.div
@@ -84,7 +83,7 @@ export function Homepage() {
         >
           Simplify complex data structures in seconds.
         </motion.p>
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -92,7 +91,7 @@ export function Homepage() {
           <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-10 py-4 rounded-full text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
             Get Started
           </Button>
-        </motion.div>
+        </motion.div> */}
       </main>
     </div>
   );
