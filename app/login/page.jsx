@@ -4,6 +4,7 @@ import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Loginpage() {
@@ -77,9 +78,17 @@ function Loginpage() {
 }
 
 function LoginComponent() {
-  const handleGoogle = (e) => {
+  const router = useRouter();
+
+  const handleGoogle = async (e) => {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // User signed in successfully
+      router.push("/convert");
+    } catch (error) {
+      console.error("Error signing in with Google", error);
+    }
   };
 
   return (

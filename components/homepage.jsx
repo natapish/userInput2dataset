@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { UserAvatar } from "./UserAvatar";
 
 export function Homepage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -33,13 +33,14 @@ export function Homepage() {
     <div className="min-h-screen bg-gray-900 text-white overflow-hidden font-sans">
       <nav className="absolute top-0 left-0 right-0 z-10 flex justify-between items-center p-6 bg-transparent">
         <div className="text-xl font-semibold text-gray-300 hover:text-white transition-colors duration-300">
-          FlexiFormat
-        </div>
-        <Button className="bg-transparent hover:bg-[#8D60F7]">
-          <Link href="/login" className="text-sm text-white">
-            Login
+          <Link
+            href="/"
+            className="text-gray-300 hover:text-white transition-colors duration-300"
+          >
+            FlexiFormat
           </Link>
-        </Button>
+        </div>
+        <UserAvatar />
       </nav>
       <main className="flex flex-col items-center justify-center min-h-screen relative">
         <motion.div
