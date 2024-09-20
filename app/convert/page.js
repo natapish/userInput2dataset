@@ -1,6 +1,10 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
+import { UserAvatar } from "@/components/UserAvatar";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useTable } from "react-table";
 
@@ -9,6 +13,11 @@ export default function Convert() {
   const [dataValues, setDataValues] = useState([[]]);
   const [responseMessage, setResponseMessage] = useState("");
   const [tableData, setTableData] = useState([]);
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    router.push("/");
+  };
 
   // Function to infer data types for each data value
   const inferDataTypes = (dataValues) => {
@@ -162,8 +171,22 @@ export default function Convert() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white overflow-hidden font-sans">
+      <nav className="absolute top-0 left-0 right-0 z-50 flex justify-between items-center p-6 bg-transparent">
+        <div className="text-xl font-semibold text-gray-300 hover:text-white transition-colors duration-300">
+          <Link
+            href="/home"
+            className="text-gray-300 hover:text-white transition-colors duration-300"
+          >
+            FlexiFormat
+          </Link>
+        </div>
+        <UserAvatar />
+      </nav>
+      <main className="relative z-10 pt-20 px-6">
+        <h1 className="text-4xl font-bold mb-8 text-center">Data Conversion</h1>
+      </main>
       <motion.div
-        className="absolute w-[40vw] h-[40vw] bg-purple-500 rounded-full filter blur-3xl opacity-10 top-0 left-0"
+        className="fixed w-[40vw] h-[40vw] bg-purple-500 rounded-full filter blur-3xl opacity-10 top-0 left-0 z-0"
         animate={{
           x: [0, 100, 0],
           y: [0, 100, 0],
@@ -171,14 +194,14 @@ export default function Convert() {
         transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
       />
       <motion.div
-        className="absolute w-[40vw] h-[40vw] bg-blue-500 rounded-full filter blur-3xl opacity-10 bottom-0 right-0"
+        className="fixed w-[40vw] h-[40vw] bg-blue-500 rounded-full filter blur-3xl opacity-10 bottom-0 right-0 z-0"
         animate={{
           x: [0, -100, 0],
           y: [0, -100, 0],
         }}
         transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
       />
-      <div className="relative z-10 container mx-auto px-4 py-12">
+      <div className="relative z-10 container mx-auto px-4 py-12 pt-24">
         <motion.h1
           className="text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500"
           initial={{ opacity: 0, y: -50 }}
